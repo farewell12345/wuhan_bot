@@ -23,10 +23,16 @@ def get_count(r):
 
 
 def get_messages(r):
-    dataB = r.html.find('#getTimelineServiceundefined', first=True).text
-    dataB = dataB[43:-11]
-    dataB = json.loads(dataB)
-    return dataB
+    # dataB = r.html.find('#getTimelineServiceundefined', first=True).text
+    # dataB = dataB[43:-11]
+    # dataB = json.loads(dataB)
+    # return dataB
+    #万一报错直接改回去==
+    url = 'http://www.dzyong.top:3005/yiqing/news'
+    dataB = get(url).json().get('data')[0]
+    news = dataB.replace("\'", '\"')
+    new = json.loads(news)
+    return new
 
 
 def get_zone(r):
@@ -70,7 +76,8 @@ async def handle_msg(context):
         message = f'确诊:{data["confirmedCount"]} 疑似:{data["suspectedCount"]} 治愈:{data["curedCount"]} 死亡:{data["deadCount"]}'
         await bot.send(context, message)
         dataB = get_messages(r)
-        latest = dataB[0]
+        # latest = dataB[0]万一报错直接改回去==
+        latest = dataB
         message = f'''{latest['title']}
 {latest['summary']}
 {latest['sourceUrl']}'''
